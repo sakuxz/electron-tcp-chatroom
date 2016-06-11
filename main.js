@@ -7,14 +7,15 @@ const BrowserWindow = electron.BrowserWindow
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 
+let mainWindow;
+
 const {ipcMain} = require('electron');
-ipcMain.on('asynchronous-message', (event, arg) => {
+ipcMain.on('changeWindow', (event, arg) => {
   console.log(arg);  // prints "ping"
-  event.sender.send('asynchronous-reply', 'pong');
+  // event.sender.send('changeWindow', 'pong');
+  var data = JSON.parse(arg);
+  mainWindow.loadURL(`file://${__dirname}/app/${data.type}.html#${data.ip}`)
 });
-
-
-let mainWindow
 
 function createWindow () {
   // Create the browser window.

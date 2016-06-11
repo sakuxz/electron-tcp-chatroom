@@ -1,0 +1,65 @@
+<!doctype html>
+<html>
+
+<head>
+  <title>Chat Room</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="build/metro.min.css" />
+  <link href="build/metro-icons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="build/bundle/index.css" />
+</head>
+
+<body>
+
+  <div class="content-wrapper">
+  </div>
+
+  <script>
+    const {
+      ipcRenderer
+    } = require('electron');
+    const fs = require('fs');
+    const {
+      dialog
+    } = require('electron').remote;
+
+    var net = require('net');
+    var chatServer = net.createServer(),
+      clientList = [];
+
+    chatServer.on('connection', function(client) {
+      // JS 可以为对象自由添加属性。这里我们添加一个 name 的自定义属性，用于表示哪个客户端（客户端的地址+端口为依据）
+      client.name = client.remoteAddress + ':' + client.remotePort;
+      // client.write('Hi ' + client.name + '!\n');
+      clientList.push(client);
+      client.on('data', function(data) {
+        broadcast(data, client); // 接受来自客户端的信息
+      });
+      client.on('close', function() {
+        $.Notify({
+          caption: '訊息',
+          content: '對方已離開',
+          type: 'info'
+        });
+      });
+    });
+
+    function broadcast(message, client) {
+      for (var i = 0; i < clientList.length; i += 1) {
+        if (client !== clientList[i]) {
+          clientList[i].write(message);
+        }
+      }
+    }
+    chatServer.listen(9000, location.hash.replace("#", ""));
+  </script>
+  <script src="js/menu.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+  <script src="build/metro.min.js"></script>
+  <script src="build/bundle/index.js"></script>
+
+</body>
+
+
+</html>

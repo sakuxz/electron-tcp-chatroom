@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+
+<head>
+  <title>Chat Room</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="build/metro.min.css" />
+  <link href="build/metro-icons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="build/bundle/index.css" />
+</head>
+
+<body>
+
+  <div class="content-wrapper">
+  </div>
+
+  <script>
+    const {
+      ipcRenderer
+    } = require('electron');
+    const fs = require('fs');
+    const {
+      dialog
+    } = require('electron').remote;
+
+    var net = require('net');
+  </script>
+  <script src="js/menu.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+  <script src="build/metro.min.js"></script>
+  <script src="build/bundle/index.js"></script>
+
+</body>
+
+
+</html>

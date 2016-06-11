@@ -56,261 +56,66 @@
 	
 	__webpack_require__(159);
 	
-	var Sheet = _react2['default'].createClass({
-	  displayName: 'Sheet',
+	var Talk = _react2['default'].createClass({
+	  displayName: 'Talk',
 	
-	  getInitialState: function getInitialState() {
-	    return {
-	      'delete': false
-	    };
-	  },
 	  render: function render() {
 	    return _react2['default'].createElement(
 	      'div',
-	      null,
-	      _react2['default'].createElement(
-	        'ul',
-	        { className: 'sheet' },
-	        _react2['default'].createElement(
-	          'li',
-	          null,
-	          _react2['default'].createElement(
-	            'div',
-	            { className: 'label' },
-	            '鍵名'
-	          ),
-	          _react2['default'].createElement(
-	            'div',
-	            { className: 'label' },
-	            '鍵值'
-	          )
-	        ),
-	        this.props.A1.map((function (e, i) {
-	          return _react2['default'].createElement(
-	            'li',
-	            { key: i },
-	            _react2['default'].createElement(
-	              'div',
-	              { className: 'input-control text' },
-	              _react2['default'].createElement('input', { type: 'text', onChange: this.setA1, 'data-id': i, id: '1-' + i, value: e })
-	            ),
-	            _react2['default'].createElement(
-	              'div',
-	              { className: 'input-control text' },
-	              _react2['default'].createElement('input', { type: 'number', onChange: this.setA2, 'data-id': i, id: '2-' + i, value: this.props.A2[i] })
-	            ),
-	            _react2['default'].createElement(
-	              'button',
-	              { style: { transitionDelay: i * 0.06 + "s" }, onClick: this.deleteItem, 'data-id': i, className: this.state['delete'] ? "button cycle-button vis" : "button cycle-button" },
-	              _react2['default'].createElement('span', { className: 'mif-cross', style: { color: 'red' } })
-	            )
-	          );
-	        }).bind(this))
-	      ),
+	      { className: this.props.data.isYour ? "outer right" : "outer" },
 	      _react2['default'].createElement(
 	        'div',
-	        { className: 'ctl-btns' },
-	        _react2['default'].createElement(
-	          'button',
-	          { onClick: this.addItem, className: 'button primary' },
-	          _react2['default'].createElement('span', { className: 'mif-plus' }),
-	          '增項'
-	        ),
-	        _react2['default'].createElement(
-	          'button',
-	          { onClick: this.showDeleteItem, className: 'button danger' },
-	          _react2['default'].createElement('span', { className: 'mif-bin' }),
-	          '刪除'
-	        )
+	        { className: 'box_l', title: new Date(this.props.data.time).toLocaleTimeString() },
+	        this.props.data.content
 	      )
 	    );
-	  },
-	  addItem: function addItem() {
-	    this.props.A1.push("");
-	    this.props.A2.push("");
-	    this.props.changeData("A1", this.props.A1);
-	    this.props.changeData("A2", this.props.A2);
-	  },
-	  deleteItem: function deleteItem(e) {
-	    var id = $(e.currentTarget).data('id');
-	    for (var i = id; i < this.props.A1.length - 1; i++) {
-	      this.props.A1[i] = this.props.A1[i + 1];
-	      this.props.A2[i] = this.props.A2[i + 1];
-	    }
-	    this.props.A1.pop();
-	    this.props.A2.pop();
-	    this.props.changeData("A1", this.props.A1);
-	    this.props.changeData("A2", this.props.A2);
-	  },
-	  showDeleteItem: function showDeleteItem() {
-	    this.setState({
-	      'delete': !this.state['delete']
-	    });
-	  },
-	  setA1: function setA1(e) {
-	    var id = $(e.target).data("id");
-	    var val = $(e.target).val();
-	    this.props.A1[id] = val;
-	    this.props.changeData("A1", this.props.A1);
-	  },
-	  setA2: function setA2(e) {
-	    var id = $(e.target).data("id");
-	    var val = $(e.target).val();
-	    this.props.A2[id] = val;
-	    this.props.changeData("A2", this.props.A2);
-	  },
-	  componentDidMount: function componentDidMount() {}
-	});
-	
-	var ChartCanvas = _react2['default'].createClass({
-	  displayName: 'ChartCanvas',
-	
-	  getInitialState: function getInitialState() {
-	    return {};
-	  },
-	  render: function render() {
-	    return _react2['default'].createElement(
-	      'div',
-	      null,
-	      _react2['default'].createElement(
-	        'ul',
-	        { className: 't-menu' },
-	        _react2['default'].createElement(
-	          'li',
-	          null,
-	          _react2['default'].createElement(
-	            'a',
-	            { onClick: this.setType, 'data-type': 'bar', href: '#' },
-	            _react2['default'].createElement('span', { className: 'icon mif-chart-bars' })
-	          )
-	        ),
-	        _react2['default'].createElement(
-	          'li',
-	          null,
-	          _react2['default'].createElement(
-	            'a',
-	            { onClick: this.setType, 'data-type': 'pie', href: '#' },
-	            _react2['default'].createElement('span', { className: 'icon mif-chart-pie' })
-	          )
-	        ),
-	        _react2['default'].createElement(
-	          'li',
-	          null,
-	          _react2['default'].createElement(
-	            'a',
-	            { onClick: this.setType, 'data-type': 'line', href: '#' },
-	            _react2['default'].createElement('span', { className: 'icon mif-chart-line' })
-	          )
-	        )
-	      ),
-	      _react2['default'].createElement('canvas', { ref: 'chart', width: '400', height: '400' })
-	    );
-	  },
-	  cxt: null,
-	  chart: null,
-	  setType: function setType(e) {
-	    console.log($(e.currentTarget).data('type'));
-	    this.props.changeData("type", $(e.currentTarget).data('type'));
-	  },
-	  componentDidMount: function componentDidMount() {
-	    var data = {
-	      labels: this.props.A1,
-	      datasets: [{
-	        label: "Student Score",
-	        fill: false,
-	        lineTension: 0.1,
-	        backgroundColor: "rgba(75,192,192,0.4)",
-	        borderColor: "rgba(75,192,192,1)",
-	        borderCapStyle: 'butt',
-	        borderDash: [],
-	        borderDashOffset: 0.0,
-	        borderJoinStyle: 'miter',
-	        pointBorderColor: "rgba(75,192,192,1)",
-	        pointBackgroundColor: "#fff",
-	        pointBorderWidth: 1,
-	        pointHoverRadius: 5,
-	        pointHoverBackgroundColor: "rgba(75,192,192,1)",
-	        pointHoverBorderColor: "rgba(220,220,220,1)",
-	        pointHoverBorderWidth: 2,
-	        pointRadius: 1,
-	        pointHitRadius: 10,
-	        data: this.props.A2
-	      }]
-	    };
-	    this.ctx = this.refs.chart;
-	    setTimeout((function () {
-	      this.chart = new Chart(this.ctx, {
-	        type: this.props.type,
-	        data: data,
-	        options: {
-	          xAxes: [{
-	            display: false
-	          }]
-	        }
-	      });
-	    }).bind(this), 0);
-	  },
-	  componentDidUpdate: function componentDidUpdate() {
-	    this.chart.destroy();
-	    var data = {
-	      labels: this.props.A1,
-	      datasets: [{
-	        label: "Student Score",
-	        fill: false,
-	        lineTension: 0.1,
-	        backgroundColor: "rgba(75,192,192,0.4)",
-	        borderColor: "rgba(75,192,192,1)",
-	        borderCapStyle: 'butt',
-	        borderDash: [],
-	        borderDashOffset: 0.0,
-	        borderJoinStyle: 'miter',
-	        pointBorderColor: "rgba(75,192,192,1)",
-	        pointBackgroundColor: "#fff",
-	        pointBorderWidth: 1,
-	        pointHoverRadius: 5,
-	        pointHoverBackgroundColor: "rgba(75,192,192,1)",
-	        pointHoverBorderColor: "rgba(220,220,220,1)",
-	        pointHoverBorderWidth: 2,
-	        pointRadius: 1,
-	        pointHitRadius: 10,
-	        data: this.props.A2
-	      }]
-	    };
-	    this.chart = new Chart(this.ctx, {
-	      type: this.props.type,
-	      data: data,
-	      options: {
-	        xAxes: [{
-	          display: false
-	        }]
-	      }
-	    });
 	  }
 	});
 	
-	var ChartSheet = _react2['default'].createClass({
-	  displayName: 'ChartSheet',
+	var ChatRoom = _react2['default'].createClass({
+	  displayName: 'ChatRoom',
 	
 	  getInitialState: function getInitialState() {
 	    return {
-	      A1: ["其恩", "湧淵", "育安", "信又", "威良"],
-	      A2: [65, 59, 80, 81, 56],
-	      type: "bar"
+	      data: [{
+	        isYour: true,
+	        content: "通識幫我簽名",
+	        time: 3414513213
+	      }, {
+	        isYour: false,
+	        content: "~~",
+	        time: 3414513213
+	      }, {
+	        isYour: false,
+	        content: "兔兔",
+	        time: 3414513213
+	      }, {
+	        isYour: true,
+	        content: "通識幫我簽名",
+	        time: 3414513213
+	      }]
 	    };
 	  },
 	  render: function render() {
 	    return _react2['default'].createElement(
 	      'div',
-	      { className: 'chart-sheet', ref: 'holder' },
+	      { className: 'container' },
+	      this.state.data.map(function (e, i) {
+	        return _react2['default'].createElement(Talk, { data: e, key: i });
+	      }),
 	      _react2['default'].createElement(
 	        'div',
-	        null,
-	        _react2['default'].createElement(ChartCanvas, { changeData: this.changeData, type: this.state.type, A1: this.state.A1, A2: this.state.A2 })
-	      ),
-	      _react2['default'].createElement(
-	        'div',
-	        null,
-	        _react2['default'].createElement(Sheet, { changeData: this.changeData, A1: this.state.A1, A2: this.state.A2 })
+	        { className: 'ctl-panel' },
+	        _react2['default'].createElement(
+	          'div',
+	          { className: 'toolbar' },
+	          _react2['default'].createElement(
+	            'button',
+	            { className: 'toolbar-button info', onClick: this.sendMes },
+	            _react2['default'].createElement('span', { className: 'mif-rocket' })
+	          )
+	        ),
+	        _react2['default'].createElement('input', { type: 'text', ref: 'inpTalk' })
 	      ),
 	      _react2['default'].createElement(
 	        'div',
@@ -319,9 +124,17 @@
 	      )
 	    );
 	  },
-	  changeData: function changeData(key, val) {
-	    this.state[key] = val;
-	    this.setState(this.state);
+	  sendMes: function sendMes() {
+	    this.client.write(this.refs.inpTalk.value);
+	    this.state.data.push({
+	      isYour: true,
+	      time: new Date().getTime(),
+	      content: this.refs.inpTalk.value
+	    });
+	    this.setState({
+	      data: this.state.data
+	    });
+	    this.refs.inpTalk.value = "";
 	  },
 	  saveData: function saveData() {
 	    var data = {
@@ -374,13 +187,48 @@
 	      }).bind(this));
 	    }).bind(this));
 	  },
+	  client: null,
+	  componentDidUpdate: function componentDidUpdate() {
+	    $("html, body").animate({ scrollTop: $(document).height() }, "slow");
+	  },
 	  componentDidMount: function componentDidMount() {
 	    var _this2 = this;
 	
-	    var t = [this.saveData, this.openData];
-	    setMenu(t);
+	    //var t = [this.saveData,this.openData]
+	    //setMenu(t);
 	
-	    var holder = this.refs.holder;
+	    this.client = new net.Socket();
+	    this.client.connect(9000, location.hash.replace("#", ""), (function () {
+	      console.log('Connected');
+	    }).bind(this));
+	
+	    this.client.on('data', (function (d) {
+	      this.state.data.push({
+	        isYour: false,
+	        time: new Date().getTime(),
+	        content: d.toString()
+	      });
+	      this.setState({
+	        data: this.state.data
+	      });
+	    }).bind(this));
+	
+	    this.client.on('close', function () {
+	      console.log('Connection closed');
+	      $.Notify({
+	        caption: '訊息',
+	        content: '對方已離開',
+	        type: 'info'
+	      });
+	    });
+	
+	    this.refs.inpTalk.onkeyup = (function (e) {
+	      if (e.keyCode === 13) {
+	        this.sendMes();
+	      }
+	    }).bind(this);
+	
+	    var holder = $('html')[0];
 	    holder.ondragover = function () {
 	      $(_this2.refs.upload).addClass('vis');
 	      return false;
@@ -417,15 +265,11 @@
 	      }).bind(_this2));
 	      return false;
 	    };
-	
-	    ipcRenderer.on('asynchronous-reply', function (event, arg) {
-	      console.log(arg); // prints "pong"
-	    });
-	    ipcRenderer.send('asynchronous-message', 'ping');
 	  }
 	});
 	
-	(0, _reactDom.render)(_react2['default'].createElement(ChartSheet, null), document.querySelector(".content-wrapper"));
+	(0, _reactDom.render)(_react2['default'].createElement(ChatRoom, null), document.querySelector(".content-wrapper"));
+	/*<button className="toolbar-button"><span className="mif-icon_name"></span></button>*/
 
 /***/ },
 /* 1 */
@@ -586,6 +430,11 @@
 	// shim for using process in browser
 	
 	var process = module.exports = {};
+	
+	// cached from whatever global is present so that test runners that stub it don't break things.
+	var cachedSetTimeout = setTimeout;
+	var cachedClearTimeout = clearTimeout;
+	
 	var queue = [];
 	var draining = false;
 	var currentQueue;
@@ -610,7 +459,7 @@
 	    if (draining) {
 	        return;
 	    }
-	    var timeout = setTimeout(cleanUpNextTick);
+	    var timeout = cachedSetTimeout(cleanUpNextTick);
 	    draining = true;
 	
 	    var len = queue.length;
@@ -627,7 +476,7 @@
 	    }
 	    currentQueue = null;
 	    draining = false;
-	    clearTimeout(timeout);
+	    cachedClearTimeout(timeout);
 	}
 	
 	process.nextTick = function (fun) {
@@ -639,7 +488,7 @@
 	    }
 	    queue.push(new Item(fun, args));
 	    if (queue.length === 1 && !draining) {
-	        setTimeout(drainQueue, 0);
+	        cachedSetTimeout(drainQueue, 0);
 	    }
 	};
 	
