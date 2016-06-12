@@ -5,6 +5,26 @@
   <title>Chat Room</title>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <script src="js/menu.js"></script>
+  <script>
+    const {
+      ipcRenderer
+    } = require('electron');
+    const fs = require('fs');
+    const {
+      dialog
+    } = require('electron').remote;
+
+    setEmptyMenu();
+    ipcRenderer.send('hideMenu', false);
+
+    // ipcRenderer.on('changeWindow', (event, arg) => {
+    //   console.log(arg); // prints "pong"
+    // });
+    // ipcRenderer.send('changeWindow', 'ping');
+  </script>
+
   <link rel="stylesheet" href="build/metro.min.css" />
   <link href="build/metro-icons.min.css" rel="stylesheet">
   <style media="screen">
@@ -115,21 +135,6 @@
 
   </div>
 
-  <script>
-    const {
-      ipcRenderer
-    } = require('electron');
-    const fs = require('fs');
-    const {
-      dialog
-    } = require('electron').remote;
-
-    // ipcRenderer.on('changeWindow', (event, arg) => {
-    //   console.log(arg); // prints "pong"
-    // });
-    // ipcRenderer.send('changeWindow', 'ping');
-  </script>
-  <script src="js/menu.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
   <script src="build/metro.min.js"></script>
   <script>
@@ -145,6 +150,7 @@
             type: $(this).data('type'),
             ip: $(this).val()
           };
+          ipcRenderer.send('hideMenu', true);
           ipcRenderer.send('changeWindow', JSON.stringify(data));
         }
       });

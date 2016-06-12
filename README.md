@@ -10,7 +10,7 @@ git clone https://github.com/sakuxz/electron-tcp-chatroom.git
 # Go into the repository
 cd electron-tcp-chatroom
 # Install dependencies and run the app
-npm install && npm start
+npm install && npm start && webpack
 ```
 
 ## 打包成執行檔 (windows)

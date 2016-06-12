@@ -77,21 +77,24 @@
 	
 	  getInitialState: function getInitialState() {
 	    return {
-	      data: [{
-	        isYour: true,
-	        content: "通識幫我簽名",
-	        time: 3414513213
-	      }, {
+	      data: [
+	      // {
+	      //   isYour: true,
+	      //   content: "通識幫我簽名",
+	      //   time: 3414513213
+	      // },
+	      // {
+	      //   isYour: false,
+	      //   content: "~~",
+	      //   time: 3414513213
+	      // },
+	      {
 	        isYour: false,
-	        content: "~~",
-	        time: 3414513213
-	      }, {
-	        isYour: false,
-	        content: "兔兔",
+	        content: "你好，歡迎使用聊天室",
 	        time: 3414513213
 	      }, {
 	        isYour: true,
-	        content: "通識幫我簽名",
+	        content: "按 Enter 即可傳送",
 	        time: 3414513213
 	      }]
 	    };
@@ -137,12 +140,8 @@
 	    this.refs.inpTalk.value = "";
 	  },
 	  saveData: function saveData() {
-	    var data = {
-	      A1: this.state.A1,
-	      A2: this.state.A2
-	    };
-	    dialog.showSaveDialog({}, function (path) {
-	      fs.writeFile(path, JSON.stringify(data), function (err) {
+	    dialog.showSaveDialog({}, (function (path) {
+	      fs.writeFile(path, JSON.stringify(this.state.data), function (err) {
 	        if (!err) {
 	          $.Notify({
 	            caption: '訊息',
@@ -157,7 +156,7 @@
 	          });
 	        }
 	      });
-	    });
+	    }).bind(this));
 	  },
 	  openData: function openData() {
 	    dialog.showOpenDialog({}, (function (path) {
@@ -174,8 +173,7 @@
 	          });
 	          var msg = JSON.parse(data);
 	          _this.setState({
-	            A1: msg.A1,
-	            A2: msg.A2
+	            data: msg
 	          });
 	        } else {
 	          $.Notify({
@@ -190,12 +188,19 @@
 	  client: null,
 	  componentDidUpdate: function componentDidUpdate() {
 	    $("html, body").animate({ scrollTop: $(document).height() }, "slow");
+	
+	    if (this.state.data[this.state.data.length - 1].isYour === true) return;
+	    var notifyData = {
+	      title: "新訊息",
+	      message: this.state.data[this.state.data.length - 1].content
+	    };
+	    ipcRenderer.send('notify', JSON.stringify(notifyData));
 	  },
 	  componentDidMount: function componentDidMount() {
 	    var _this2 = this;
 	
-	    //var t = [this.saveData,this.openData]
-	    //setMenu(t);
+	    var t = [this.saveData, this.openData];
+	    setMenu(t);
 	
 	    this.client = new net.Socket();
 	    this.client.connect(9000, location.hash.replace("#", ""), (function () {
@@ -252,8 +257,7 @@
 	          });
 	          var msg = JSON.parse(data);
 	          _this2.setState({
-	            A1: msg.A1,
-	            A2: msg.A2
+	            data: msg
 	          });
 	        } else {
 	          $.Notify({
@@ -430,11 +434,6 @@
 	// shim for using process in browser
 	
 	var process = module.exports = {};
-	
-	// cached from whatever global is present so that test runners that stub it don't break things.
-	var cachedSetTimeout = setTimeout;
-	var cachedClearTimeout = clearTimeout;
-	
 	var queue = [];
 	var draining = false;
 	var currentQueue;
@@ -459,7 +458,7 @@
 	    if (draining) {
 	        return;
 	    }
-	    var timeout = cachedSetTimeout(cleanUpNextTick);
+	    var timeout = setTimeout(cleanUpNextTick);
 	    draining = true;
 	
 	    var len = queue.length;
@@ -476,7 +475,7 @@
 	    }
 	    currentQueue = null;
 	    draining = false;
-	    cachedClearTimeout(timeout);
+	    clearTimeout(timeout);
 	}
 	
 	process.nextTick = function (fun) {
@@ -488,7 +487,7 @@
 	    }
 	    queue.push(new Item(fun, args));
 	    if (queue.length === 1 && !draining) {
-	        cachedSetTimeout(drainQueue, 0);
+	        setTimeout(drainQueue, 0);
 	    }
 	};
 	

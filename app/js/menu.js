@@ -1,6 +1,13 @@
 const {remote} = require('electron');
 const {Menu, MenuItem} = remote;
 
+function setEmptyMenu() {
+  const template = [
+  ];
+  const menu = Menu.buildFromTemplate(template);
+  Menu.setApplicationMenu(menu);
+}
+
 function setMenu(func) {
   const template = [
     {

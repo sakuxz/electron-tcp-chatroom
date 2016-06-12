@@ -17,24 +17,24 @@ var ChatRoom = React.createClass({
   getInitialState: function() {
     return {
       data: [
-        {
-          isYour: true,
-          content: "通識幫我簽名",
-          time: 3414513213
-        },
+        // {
+        //   isYour: true,
+        //   content: "通識幫我簽名",
+        //   time: 3414513213
+        // },
+        // {
+        //   isYour: false,
+        //   content: "~~",
+        //   time: 3414513213
+        // },
         {
           isYour: false,
-          content: "~~",
-          time: 3414513213
-        },
-        {
-          isYour: false,
-          content: "兔兔",
+          content: "你好，歡迎使用聊天室",
           time: 3414513213
         },
         {
           isYour: true,
-          content: "通識幫我簽名",
+          content: "按 Enter 即可傳送",
           time: 3414513213
         }
       ]
@@ -73,12 +73,8 @@ var ChatRoom = React.createClass({
     this.refs.inpTalk.value = "";
   },
   saveData: function() {
-    var data = {
-      A1: this.state.A1,
-      A2: this.state.A2
-    };
     dialog.showSaveDialog({},function(path){
-      fs.writeFile(path, JSON.stringify(data), (err) => {
+      fs.writeFile(path, JSON.stringify(this.state.data), (err) => {
         if (!err){
           $.Notify({
               caption: '訊息',
@@ -93,7 +89,7 @@ var ChatRoom = React.createClass({
           });
         }
       });
-    });
+    }.bind(this));
   },
   openData: function() {
     dialog.showOpenDialog({},function(path){
@@ -108,8 +104,7 @@ var ChatRoom = React.createClass({
           });
           var msg = JSON.parse(data);
           this.setState({
-            A1: msg.A1,
-            A2: msg.A2,
+            data: msg
           });
         }else{
           $.Notify({
@@ -124,10 +119,17 @@ var ChatRoom = React.createClass({
   client: null,
   componentDidUpdate: function() {
     $("html, body").animate({ scrollTop: $(document).height() }, "slow");
+
+    if(this.state.data[this.state.data.length-1].isYour === true) return;
+    var notifyData = {
+      title: "新訊息",
+      message: this.state.data[this.state.data.length-1].content
+    };
+    ipcRenderer.send('notify', JSON.stringify(notifyData));
   },
   componentDidMount: function() {
-    //var t = [this.saveData,this.openData]
-    //setMenu(t);
+    var t = [this.saveData,this.openData]
+    setMenu(t);
 
     this.client = new net.Socket();
     this.client.connect(9000, location.hash.replace("#",""), function() {
@@ -184,8 +186,7 @@ var ChatRoom = React.createClass({
           });
           var msg = JSON.parse(data);
           this.setState({
-            A1: msg.A1,
-            A2: msg.A2,
+            data: msg
           });
         }else{
           $.Notify({
